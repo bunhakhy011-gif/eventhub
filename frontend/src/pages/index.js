@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import HeroSearch from '../components/HeroSearch'
 import EventCard from '../components/EventCard'
-import api, { mockEvents } from '../lib/api'
+import api from '../lib/api'
 
 const categories = [
   'Music',
@@ -21,22 +21,15 @@ export default function Home() {
     setLoading(true)
     setFilters(searchFilters)
 
-    try {
-      const params = new URLSearchParams()
-      if (searchFilters.location) params.set('location', searchFilters.location)
-      if (searchFilters.keyword) params.set('search', searchFilters.keyword)
-      if (searchFilters.date) params.set('date', searchFilters.date)
+    const params = new URLSearchParams()
+    if (searchFilters.location) params.set('location', searchFilters.location)
+    if (searchFilters.keyword) params.set('search', searchFilters.keyword)
+    if (searchFilters.date) params.set('date', searchFilters.date)
 
-      const query = params.toString() ? `?${params.toString()}` : ''
-      const response = await api.get(`/events${query}`)
-      setEvents(response.data)
-    } catch (error) {
-      console.log('Using mock data - backend not available')
-      // Use mock data when API is not available
-      setEvents(mockEvents)
-    } finally {
-      setLoading(false)
-    }
+    const query = params.toString() ? `?${params.toString()}` : ''
+    const response = await api.get(`/events${query}`)
+    setEvents(response.data)
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -99,4 +92,3 @@ export default function Home() {
     </section>
   )
 }
-
